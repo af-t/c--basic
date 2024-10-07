@@ -41,7 +41,3 @@ g++ -std=c++11 00.basic.cpp -o basic_usage
 ## Contributing
 
 Feel free to open issues or submit pull requests to contribute to this repository. Improvements or additional examples of `std::vector` are welcome!
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
