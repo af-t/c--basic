@@ -1,43 +1,42 @@
-# C++ `std::vector` Implementations
+# Vector Operations in C++
 
-This repository contains various examples demonstrating the use of `std::vector` in C++ (C++11 and above). Each file explores different ways to use and optimize `std::vector` in real-world scenarios.
+This repository contains a variety of examples and implementations using `std::vector` in C++. Each file demonstrates different operations and techniques related to vectors.
 
-## Table of Contents
+## List of Files
 
-1. [Basic Usage](#1-basic-usage)
-2. [Add element to vector](#2-add-element-to-vector)
-3. [Delete element from vector](#3-delete-element-from-vector)
-4. [Inserting and Deleting Elements](#4-insert-and-delete-elements)
+1. **[basic.cpp](00.basic.cpp)**: Basic operations with `std::vector`.
+2. **[push_back.cpp](01.push_back.cpp)**: Demonstration of adding elements using `push_back`.
+3. **[pop_back.cpp](02.pop_back.cpp)**: Removing the last element using `pop_back`.
+4. **[insert_erase.cpp](03.insert_erase.cpp)**: Inserting and erasing elements at specific positions.
+5. **[reverse.cpp](04.reverse.cpp)**: Reversing the order of elements in a vector.
+6. **[find.cpp](05.find.cpp)**: Finding elements in a vector.
+7. **[matrix.cpp](06.matrix.cpp)**: Implementing a 2D vector (matrix).
+8. **[sort.cpp](07.sort.cpp)**: Sorting elements in a vector using `std::sort`.
+9. **[counting.cpp](08.counting.cpp)**: Counting elements that meet certain conditions.
+10. **[concat.cpp](09.concat.cpp)**: Concatenating two vectors.
+11. **[remove_duplicate_elements.cpp](10.remove_duplicate_elements.cpp)**: Removing duplicate elements from a vector.
+12. **[empty_vector.cpp](11.empty_vector.cpp)**: Operations on an empty vector.
+13. **[vector_x_struct.cpp](12.vector_x_struct.cpp)**: Using `std::vector` with structures.
+14. **[iteration.cpp](13.iteration.cpp)**: Iterating through elements of a vector.
+15. **[reverse_iteration.cpp](14.reverse_iteration.cpp)**: Iterating through elements in reverse order.
+16. **[capacity_and_reverse_memory.cpp](15.capacity_and_reverse_memory.cpp)**: Managing memory with `capacity()` and other memory operations.
+17. **[manipulate_with_lamda.cpp](16.manipulate_with_lamda.cpp)**: Manipulating vector elements with lambda expressions.
+18. **[fill_element.cpp](17.fill_element.cpp)**: Filling a vector with specific elements.
+19. **[concat_wth_copy.cpp](18.concat_wth_copy.cpp)**: Concatenating vectors using `std::copy`.
+20. **[count_if.cpp](19.count_if.cpp)**: Counting elements that match a condition using `std::count_if`.
+21. **[search_unique_element.cpp](20.search_unique_element.cpp)**: Searching for unique elements in a vector.
+22. **[use_accumulate.cpp](21.use_accumulate.cpp)**: Using `std::accumulate` to sum elements.
+23. **[transform_implementation.cpp](22.transform_implementation.cpp)**: Transforming elements using `std::transform`.
+24. **[emplace_back.cpp](23.emplace_back.cpp)**: Constructing elements directly in a vector using `emplace_back`.
+25. **[shrink_to_fit_implementation.cpp](24.shrink_to_fit_implementation.cpp)**: Reducing unused capacity with `shrink_to_fit`.
+26. **[resize.cpp](25.resize.cpp)**: Resizing a vector using `resize`.
+27. **[remove_if.cpp](26.remove_if.cpp)**: Removing elements based on a condition with `std::remove_if`.
+28. **[with_pointer.cpp](27.with_pointer.cpp)**: Using pointers with `std::vector`.
+29. **[with_enum.cpp](28.with_enum.cpp)**: Using enums in a vector.
+30. **[pair.cpp](29.pair.cpp)**: Implementing `std::pair` with `std::vector`.
+31. **[tuple.cpp](30.tuple.cpp)**: Using `std::tuple` with `std::vector`.
+32. **[move_element.cpp](31.move_element.cpp)**: Moving elements with `std::move`.
+33. **[unique_ptr.cpp](32.unique_ptr.cpp)**: Using `std::unique_ptr` in `std::vector`.
 
----
+Each file contains a specific implementation or concept, feel free to explore them to understand how vectors work in C++!
 
-## 1. Basic Usage
-- **File**: [00.basic.cpp](./00.basic.cpp)  
-- **Description**: Basic introduction to using `std::vector` in C++, demonstrating adding, accessing, and iterating through elements in a vector.
-
-## 2. Add element to vector
-- **File**: [01.push_back.cpp](./01.push_back.cpp)  
-- **Description**: Basic introduction to add element with `push_back` to vector.
-
-## 3. Delete element from vector
-- **File**: [02.pop_back.cpp](./02.pop_back.cpp)  
-- **Description**: Basic introduction to remove element with `pop_back` from vector.
-
-## 4. Insert and delete elements
-- **File**: [03.insert_erase.cpp](./03.insert_erase.cpp)
-- **Description**: Basic introduction to Inserting and Deleting Elements with `insert` and `erase`.
-
----
-
-## Usage
-
-To compile and run the examples, use a C++11 or higher compliant compiler. For example, with `g++`:
-
-```bash
-g++ -std=c++11 00.basic.cpp -o basic_usage
-./basic_usage
-```
-
-## Contributing
-
-Feel free to open issues or submit pull requests to contribute to this repository. Improvements or additional examples of `std::vector` are welcome!
