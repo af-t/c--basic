@@ -5,6 +5,7 @@ This repository contains basic examples of C++ code, demonstrating fundamental c
 ## Project Structure
 
 - `/vector/` : Contains examples related to the usage of vectors in C++.
+- `/others/` : Contains code to perform several operations (not specified).
 
 ## Getting Started
 
