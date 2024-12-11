@@ -5,130 +5,141 @@
 #include <functional>
 #include <random>
 #include <chrono>
+#include <limits>
+#include <sstream>
 
-using namespace std;
+// Use enum class for operation types
+enum class Operation {
+  Addition,
+  Subtraction,
+  Multiplication,
+  Division
+};
 
-// Helper function to format time
-string formatTime(long long milliseconds) {
-    int seconds = milliseconds / 1000;
-    int minutes = seconds / 60;
-    int hours = minutes / 60;
+// Use named constants for clarity
+const int MAX_ATTEMPTS = 1000;
+const int MIN_RANGE_DEFAULT = -1000000;
+const int MAX_RANGE_DEFAULT =  1000000;
 
-    int ms = milliseconds % 1000;
-    int sec = seconds % 60;
-    int min = minutes % 60;
+// Helper function to format time using chrono's formatting capabilities
+std::string formatTime(long long milliseconds) {
+    auto duration = std::chrono::milliseconds(milliseconds);
+    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+    duration -= seconds;
+    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(seconds);
+    seconds -= minutes;
+    auto hours = std::chrono::duration_cast<std::chrono::hours>(minutes);
+    minutes -= hours;
 
-    string result;
-    if (hours > 0) result += to_string(hours) + "h ";
-    if (min > 0) result += to_string(min) + "m ";
-    result += to_string(sec) + "s " + to_string(ms) + "ms";
-
-    return result;
+    std::stringstream ss;
+    if (hours.count() > 0) ss << hours.count() << "h ";
+    if (minutes.count() > 0) ss << minutes.count() << "m ";
+    ss << seconds.count() << "s " << duration.count() << "ms";
+    return ss.str();
 }
 
-// Input helper function
-string input(const string& prompt) {
-    cout << prompt;
-    string value;
-    getline(cin, value);
-    return value;
+// Input helper function with improved validation
+double inputNumber(const std::string& prompt, int min = std::numeric_limits<int>::min(), int max = std::numeric_limits<int>::max()) {
+    std::string line;
+    while (true) {
+        std::cout << prompt;
+        std::getline(std::cin, line);
+        std::stringstream ss(line);
+        double value;
+        if (ss >> value && ss.eof() && value >= min && value <= max) {
+            return value;
+        } else {
+            std::cout << "Invalid input. Please enter a number between " << min << " and " << max << ".";
+            //Clear error flags
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
 }
+
 
 // Random number generator
 int randomNumber(int min, int max) {
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> dis(min, max);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(min, max);
     return dis(gen);
 }
 
-void mathTest(int attempts, const function<double(double, double)>& operation, string text, int min, int max) {
-    auto start = chrono::steady_clock::now();
-    int correct = 0, wrong = 0;
+void mathTest(int attempts, const std::function<double(double, double)>& operation, const std::string& text, int min, int max) {
+    auto start = std::chrono::steady_clock::now();
+    int correct = 0;
+    int wrong = 0;
 
-    while (attempts-- > 0) {
+    for (int i = 0; i < attempts; ++i) {
         int a = randomNumber(min, max);
-        int b = randomNumber(min, max); 
+        int b = randomNumber(min, max);
         if (text == " / " && b == 0) b = 1; // Avoid division by zero
+
         double result = operation(a, b);
+        std::cout << a << text << b << " = ";
+        double answer = inputNumber("", std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
 
-        cout << a << text << b << " = ";
-        double answer;
-        cin >> answer;
 
-        if (abs(answer - result) < 0.01) { // Tolerance for float comparison
+        if (std::abs(answer - result) < 0.01) {
             correct++;
         } else {
             wrong++;
-            cout << "Incorrect! (Q: " << a << text << b
-                 << "; Your Answer: " << answer
-                 << ", Correct Answer: " << result << ")" << endl;
+            std::cout << "Incorrect! (Q: " << a << text << b
+                      << "; Your Answer: " << answer
+                      << ", Correct Answer: " << result << ")" << std::endl;
         }
-
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
     }
 
-    auto end = chrono::steady_clock::now();
-    long long totalTime = chrono::duration_cast<chrono::milliseconds>(end - start).count();
+    auto end = std::chrono::steady_clock::now();
+    long long totalTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     double avgTime = static_cast<double>(totalTime) / (correct + wrong);
 
-    cout << "\nTotal correct answers: " << correct << endl;
-    cout << "Total wrong answers: " << wrong << endl;
-    cout << "Total time spent: " << formatTime(totalTime) << endl;
-    cout << "Average time per answer: " << formatTime(static_cast<long long>(avgTime)) << endl;
+    std::cout << "\nTotal correct answers: " << correct << std::endl;
+    std::cout << "Total wrong answers: " << wrong << std::endl;
+    std::cout << "Total time spent: " << formatTime(totalTime) << std::endl;
+    std::cout << "Average time per answer: " << formatTime(static_cast<long long>(avgTime)) << std::endl;
 
-    cout << "Press Enter to continue...";
-    cin.ignore();
+    std::cout << "Press Enter to continue...";
+    std::cin.ignore();
 }
 
 int main() {
-    map<int, function<double(double, double)>> operations = {
-        {1, [](double a, double b) { return a + b; }},
-        {2, [](double a, double b) { return a - b; }},
-        {3, [](double a, double b) { return a * b; }},
-        {4, [](double a, double b) { return round((a / b) * 100) / 100; }} // Rounded to 2 decimal places
+    std::map<Operation, std::function<double(double, double)>> operations = {
+        {Operation::Addition, [](double a, double b) { return a + b; }},
+        {Operation::Subtraction, [](double a, double b) { return a - b; }},
+        {Operation::Multiplication, [](double a, double b) { return a * b; }},
+        {Operation::Division, [](double a, double b) { return static_cast<double>(static_cast<long long>((a / b) * 100)) / 100; }}
     };
-    map<int, string> texts = {
-        {1, " + "},
-        {2, " - "},
-        {3, " * "},
-        {4, " / "}
+    std::map<Operation, std::string> texts = {
+        {Operation::Addition, " + "},
+        {Operation::Subtraction, " - "},
+        {Operation::Multiplication, " * "},
+        {Operation::Division, " / "}
     };
 
     while (true) {
-        cout << "\033[2J\033[1;1H"; // Clear screen (ANSI escape codes)
-        cout << "\nSelect the type of test:" << endl;
-        cout << "1. Addition (+)" << endl;
-        cout << "2. Subtraction (-)" << endl;
-        cout << "3. Multiplication (*)" << endl;
-        cout << "4. Division (/)" << endl;
-        cout << "5. Exit" << endl;
+        std::cout << "\033[2J\033[1;1H"; // Clear screen
+        std::cout << "\nSelect the type of test:" << std::endl;
+        std::cout << "1. Addition (+)" << std::endl;
+        std::cout << "2. Subtraction (-)" << std::endl;
+        std::cout << "3. Multiplication (*)" << std::endl;
+        std::cout << "4. Division (/)" << std::endl;
+        std::cout << "5. Exit" << std::endl;
 
-        int choice = stoi(input("Enter your choice (1-5): "));
+        int choice = static_cast<int>(inputNumber("Enter your choice (1-5): ", 1, 5));
         if (choice == 5) {
-            cout << "\nGoodbye!" << endl;
+            std::cout << "\nGoodbye!" << std::endl;
             break;
         }
 
-        if (operations.find(choice) == operations.end()) {
-            cout << "Invalid choice. Please try again." << endl;
-            continue;
-        }
+        Operation op = static_cast<Operation>(choice - 1);
+        int attempts = static_cast<int>(inputNumber("Enter the number of attempts (1-" + std::to_string(MAX_ATTEMPTS) + "): ", 1, MAX_ATTEMPTS));
+        int min = static_cast<int>(inputNumber("Enter the minimum range (" + std::to_string(MIN_RANGE_DEFAULT) + "-): ", MIN_RANGE_DEFAULT));
+        int max = static_cast<int>(inputNumber("Enter the maximum range (->" + std::to_string(MAX_RANGE_DEFAULT) + "): ", min, MAX_RANGE_DEFAULT));
 
-        int attempts = stoi(input("Enter the number of attempts: "));
-        if (attempts <= 0) {
-            cout << "Invalid number of attempts. Please try again." << endl;
-            continue;
-        }
 
-        int min = stoi(input("Enter the minimum range: "));
-        int max = stoi(input("Enter the maximum range: "));
-        if (min > max) {
-            cout << "Invalid range. Minimum should be less than or equal to maximum. Please try again." << endl;
-            continue;
-        }
-
-        mathTest(attempts, operations[choice], texts[choice], min, max);
+        mathTest(attempts, operations[op], texts[op], min, max);
     }
 
     return 0;
