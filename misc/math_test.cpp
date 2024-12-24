@@ -51,8 +51,8 @@ double inputNumber(const std::string& prompt, int min = std::numeric_limits<int>
         } else {
             std::cout << "Invalid input. Please enter a number between " << min << " and " << max << ".";
             //Clear error flags
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            //std::cin.clear();
+            //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
 }
